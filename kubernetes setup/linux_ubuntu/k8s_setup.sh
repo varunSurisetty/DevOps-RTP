@@ -19,7 +19,7 @@ sudo systemctl status docker
 ####################################################
 ######## Add Kubernetes Signing Key ################
 ####################################################
-sudo apt install apt-transport-https ca-certificates curl gpg
+sudo apt install apt-transport-https ca-certificates curl gpg -y
 sudo mkdir -p -m 755 /etc/apt/keyrings
 
 #adding the Kubernetes repository to the APT sources list
