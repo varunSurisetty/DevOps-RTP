@@ -7,6 +7,7 @@
 
 sudo apt update
 sudo apt install docker.io -y
+sudo chmod 666 /var/run/docker.sock
 
 #docker to launch on boot
 sudo systemctl enable docker
