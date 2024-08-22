@@ -32,8 +32,12 @@ sudo nano /lib/systemd/system/kubelet.service.d/10-kubeadm.conf
 sudo systemctl daemon-reload && sudo systemctl restart kubelet
 
 #initialise kubeadm in masteer node
-sudo kubeadm init --control-plane-endpoint=master-node --upload-certs --ignore-preflight-errors=all
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --control-plane-endpoint=master-node --upload-certs 
+#--ignore-preflight-errors=all
 
+#if failed for once, 
+#sudo kubeadm reset
+#and follow all commands again
 
 #11. Create a directory for the Kubernetes cluster:
 mkdir -p $HOME/.kube
@@ -42,6 +46,9 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 
 #Step 4: Deploy Pod Network to Cluster
-kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
+kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.49.0/deploy/static/provider/baremetal/deploy.yaml
+
+
 kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 kubectl get nodes
