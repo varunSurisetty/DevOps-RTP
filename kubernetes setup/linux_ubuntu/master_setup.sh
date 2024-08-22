@@ -25,7 +25,7 @@ sudo nano /etc/docker/daemon.json
 sudo systemctl daemon-reload && sudo systemctl restart docker
 
 #edit kubeadm conf file
-sudo nano /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+sudo nano /lib/systemd/system/kubelet.service.d/10-kubeadm.conf
 # add Environment="KUBELET_EXTRA_ARGS=--fail-swap-on=false"
 
 #restart
