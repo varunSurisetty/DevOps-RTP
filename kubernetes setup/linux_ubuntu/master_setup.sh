@@ -1,35 +1,62 @@
+
+####################################################
+########      HOSTNAME AND IP-ADD        ###########
+####################################################
+
 sudo hostnamectl set-hostname master-node
 
 # Edit the hosts file on each node by adding the IP addresses and hostnames of the servers that will be part of the cluster.
 sudo nano /etc/hosts
 # add (ip-address hostname)
 
+
+####################################################
+########      KUBELET FILE SETUP         ###########
+####################################################
+
 #edit kubelet file
 sudo nano /etc/default/kubelet
-# add KUBELET_EXTRA_ARGS="--cgroup-driver=cgroupfs"
+KUBELET_EXTRA_ARGS="--cgroup-driver=cgroupfs"
 
 sudo systemctl daemon-reload && sudo systemctl restart kubelet
 
+
+
+###################################################
+########      DOCKER SETUP              ###########
+###################################################
+
 #edit docker file
 sudo nano /etc/docker/daemon.json
-# {
-#       "exec-opts": ["native.cgroupdriver=systemd"],
-#       "log-driver": "json-file",
-#       "log-opts": {
-#       "max-size": "100m"
-#    },
-#        "storage-driver": "overlay2"
-#        }
+{
+       "exec-opts": ["native.cgroupdriver=systemd"],
+       "log-driver": "json-file",
+       "log-opts": {
+       "max-size": "100m"
+    },
+        "storage-driver": "overlay2"
+        }
 
 #restart
 sudo systemctl daemon-reload && sudo systemctl restart docker
 
+
+####################################################
+########      KUBEADM  CONF FILE SETUP   ###########
+####################################################
+
 #edit kubeadm conf file
 sudo nano /lib/systemd/system/kubelet.service.d/10-kubeadm.conf
-# add Environment="KUBELET_EXTRA_ARGS=--fail-swap-on=false"
+Environment="KUBELET_EXTRA_ARGS=--fail-swap-on=false"
 
 #restart
 sudo systemctl daemon-reload && sudo systemctl restart kubelet
+
+
+
+####################################################
+########      KUBEADM INITIALISE         ###########
+####################################################
 
 #initialise kubeadm in masteer node
 sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --control-plane-endpoint=master-node --upload-certs 
@@ -38,6 +65,11 @@ sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --control-plane-endpoint=mast
 #if failed for once, 
 #sudo kubeadm reset
 #and follow all commands again
+
+
+####################################################
+########      HOME KUBE DIR SETUP        ###########
+####################################################
 
 #11. Create a directory for the Kubernetes cluster:
 mkdir -p $HOME/.kube

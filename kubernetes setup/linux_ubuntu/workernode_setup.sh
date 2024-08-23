@@ -4,6 +4,10 @@ sudo hostnamectl set-hostname worker01
 sudo nano /etc/hosts
 # add (ip-address hostname)
 
+
+#run this command in master node to get join command and copy the command to clipboard
+kubeadm token create --print-join-command
+
 sudo systemctl stop apparmor && sudo systemctl disable apparmor
 sudo systemctl restart containerd.service
-sudo kubeadm join [master-node-ip]:6443 --token [token] --discovery-token-ca-cert-hash sha256:[hash]
+
