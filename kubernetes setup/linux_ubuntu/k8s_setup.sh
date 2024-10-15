@@ -17,6 +17,27 @@ sudo systemctl status docker
 # if docker not running, run below command
 #sudo systemctl start docker
 
+sudo swapoff -a
+sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+
+#Load the required containerd modules
+sudo nano /etc/modules-load.d/containerd.conf
+#add 
+overlay
+br_netfilter
+#in nano editor
+sudo modprobe overlay
+sudo modprobe br_netfilter
+
+# edit kubernetes.conf file to configure Kubernetes networking
+sudo nano /etc/sysctl.d/kubernetes.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+net.ipv4.ip_forward = 1
+
+#reload
+sudo sysctl --system
+
 ####################################################
 ######## Add Kubernetes Signing Key ################
 ####################################################
@@ -32,7 +53,7 @@ sudo apt update
 
 sudo apt install kubeadm kubelet kubectl -y
 
-#sudo apt-mark hold kubeadm kubelet kubectl
+sudo apt-mark hold kubeadm kubelet kubectl
 
 
 ####################################################
@@ -40,23 +61,3 @@ sudo apt install kubeadm kubelet kubectl -y
 ####################################################
 
 #Disable all swap spaces
-sudo swapoff -a
-sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
-
-#Load the required containerd modules
-sudo nano /etc/modules-load.d/containerd.conf
-#add 
-#overlay
-#br_netfilter
-#in nano editor
-sudo modprobe overlay
-sudo modprobe br_netfilter
-
-# edit kubernetes.conf file to configure Kubernetes networking
-sudo nano /etc/sysctl.d/kubernetes.conf
-#net.bridge.bridge-nf-call-ip6tables = 1
-#net.bridge.bridge-nf-call-iptables = 1
-#net.ipv4.ip_forward = 1
-
-#reload
-sudo sysctl --system
