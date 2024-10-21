@@ -1,0 +1,2 @@
+- [] create instance of linux, windows and macOS
+- [] 
