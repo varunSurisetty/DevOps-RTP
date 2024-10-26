@@ -6,4 +6,4 @@
 - [x] install [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)
 - [x] install [Kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installing-from-release-binaries)
 
-Boom, You got a cluster and k8s mini setup 
+Boom, You got a cluster and k8s mini setup with kubectl installed
